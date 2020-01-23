@@ -56,7 +56,8 @@ public class Leetcode142 {
                 }
             }
             //System.out.println( fp.val + "   "+ sp.val );
-            if (fp == null || fp.next == null) {
+            if (fp == null || fp.next == null) {    /**   ！！！注意这里要判断是否断开
+             **/
                 return null;
             }
             //说明有环，求环的起始节点
