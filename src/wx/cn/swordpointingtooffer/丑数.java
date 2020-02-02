@@ -11,7 +11,8 @@ public class 丑数 {
      * 用三个指针来表示三条队列 即可
      *
      * 注意下表cur是从1 开始
-     * 最后第n个丑数下表为index-1
+     * 最后第n个丑数下表为index-1 因为第一个丑数为1 放在下标为0的数组中
+     *
      */
 
     public class Solution {
