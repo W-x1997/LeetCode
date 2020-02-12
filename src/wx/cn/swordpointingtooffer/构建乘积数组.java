@@ -11,5 +11,20 @@ public class 构建乘积数组 {
      * 两个倒三角形求解即可
      */
 
-
+    public int[] multiply(int[] A) {
+        int len = A.length;
+        int[] B = new int[len];
+        if(len != 0){
+            B[0] = 1;
+            for(int i=1; i<len; i++){
+                B[i] = A[i-1]*B[i-1];    //k[i-1]A[i-1]
+            }
+            int temp = 1;
+            for(int i=len-2; i>=0; i--){
+                temp *= A[i+1];
+                B[i] *= temp;           //p[i+1]A[i+1]
+            }
+        }
+        return B;
+    }
 }
