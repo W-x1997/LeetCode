@@ -28,11 +28,44 @@ public class Leetcode887 {
      * Otherwise, drop the egg from floor 2.  If it breaks, we know with certainty that F = 1.
      * If it didn't break, then we know with certainty F = 2.
      * Hence, we needed 2 moves in the worst case to know what F is with certainty.
+     *
+     *
+     *
+     * 可以用二分 优化！！！
      */
 
 
     class Solution {
-        public int superEggDrop(int K, int N) {
+        public int superEggDrop1(int K, int N) {
+
+            /**
+             *
+             * 复杂度分析：
+             *
+             * 时间复杂度：O(NK^2)O(NK
+             * 2
+             *  )，三层 for 循环，每层循环都是线性的；
+             * 空间复杂度：O(NK)O(NK)，表格的大小。
+             * 这里需要盯着「状态转移方程」使劲看：
+             *
+             * dp[i][j] = \min_{1 \le k \le i} \left(\max(dp[k - 1][j - 1], dp[i - k][j]) + 1 \right)
+             * dp[i][j]=
+             * 1≤k≤i
+             * min
+             * ​
+             *  (max(dp[k−1][j−1],dp[i−k][j])+1)
+             *
+             * 「状态转移方程」里最外层的变量是 k，它枚举了扔下鸡蛋的楼层的高度，这里它是自变量，将其余的 i 和 j 视为常数：
+             *
+             * dp[k - 1][j - 1]：根据语义，k 增大的时候，楼层大小越大，它的值就越大；
+             * dp[i - k][j]：根据语义，k 增大的时候，楼层大小越小，它的值就越小。
+             * 可以得出一个是单调不减的（dp[k - 1][j - 1]，下图红点），一个是单调不增的
+             *
+             * 作者：liweiwei1419
+             * 链接：https://leetcode-cn.com/problems/super-egg-drop/solution/dong-tai-gui-hua-zhi-jie-shi-guan-fang-ti-jie-fang/
+             * 来源：力扣（LeetCode）
+             * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+             */
 
             // dp[i][j]：一共有 i 层楼梯的情况下，使用 j 个鸡蛋的最少实验的次数
             // 注意：
@@ -80,6 +113,62 @@ public class Leetcode887 {
             return dp[N][K];
         }
 
+    }
+
+
+    public int superEggDrop2(int K, int N) {
+        /**
+         * 时间复杂度：O(NK \log N)O(NKlogN)，其中一层循环变成二分查找，复杂度成为对数；
+         * 空间复杂度：O(NK)O(NK)，表格的大小。
+         */
+        // dp[i][j]：一共有 i 层楼梯的情况下，使用 j 个鸡蛋的最少仍的次数
+        int[][] dp = new int[N + 1][K + 1];
+
+        // 初始化
+        for (int i = 0; i <= N; i++) {
+            Arrays.fill(dp[i], i);
+        }
+        for (int j = 0; j <= K; j++) {
+            dp[0][j] = 0;
+        }
+
+        dp[1][0] = 0;
+        for (int j = 1; j <= K; j++) {
+            dp[1][j] = 1;
+        }
+        for (int i = 0; i <= N; i++) {
+            dp[i][0] = 0;
+            dp[i][1] = i;
+        }
+
+        // 开始递推
+        for (int i = 2; i <= N; i++) {
+            for (int j = 2; j <= K; j++) {
+                // 在区间 [1, i] 里确定一个最优值
+                int left = 1;
+                int right = i;
+                while (left < right) {
+                    // 找 dp[k - 1][j - 1] <= dp[i - mid][j] 的最大值 k
+                    int mid = left + (right - left + 1) / 2;
+
+                    int breakCount = dp[mid - 1][j - 1];
+                    int notBreakCount = dp[i - mid][j];
+                    if (breakCount > notBreakCount) {
+                        // 排除法（减治思想）写对二分见第 35 题，先想什么时候不是解
+                        // 严格大于的时候一定不是解，此时 mid 一定不是解
+                        // 下一轮搜索区间是 [left, mid - 1]
+                        right = mid - 1;
+                    } else {
+                        // 这个区间一定是上一个区间的反面，即 [mid, right]
+                        // 注意这个时候取中间数要上取整，int mid = left + (right - left + 1) / 2;
+                        left = mid;
+                    }
+                }
+                // left 这个下标就是最优的 k 值，把它代入转移方程 Math.max(dp[k - 1][j - 1], dp[i - k][j]) + 1) 即可
+                dp[i][j] = Math.max(dp[left - 1][j - 1], dp[i - left][j]) + 1;
+            }
+        }
+        return dp[N][K];
     }
 
 
