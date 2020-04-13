@@ -17,7 +17,7 @@ public class Leetcode16_03 {
          * @param end1
          * @param start2
          * @param end2
-         * @return
+
          */
         public double[] intersection(int[] start1, int[] end1, int[] start2, int[] end2) {
             double k1 = 0, k2 = 0, b1 = 0, b2 = 0;
