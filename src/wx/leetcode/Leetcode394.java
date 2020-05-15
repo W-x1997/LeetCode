@@ -33,6 +33,13 @@ public class Leetcode394 {
          * @return
          */
         public String decodeString(String s) {
+
+            /**
+             *
+             * 用两个栈 一个存数字 一个存string
+             *
+             * 分四种情况讨论 分别是 数字，【， 】，字母
+             */
             Stack<Integer> nums=new Stack();
             Stack<String> str=new Stack();
             String res="";   //res是保留的当前的 也就是括号里的 括号之前的都在stack中
@@ -68,7 +75,7 @@ public class Leetcode394 {
             }
 
 
-            return res.toString();
+            return res;
         }
     }
 }
