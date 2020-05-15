@@ -19,39 +19,45 @@ public class Leetcode56 {
 
 
     class Solution {
-        public int[][] merge(int[][] intervals) {
-            int len = intervals.length;
-            if (len < 2) {
-                return intervals;
-            }
+        class Solution2 {
+            public int[][] merge(int[][] intervals) {
 
-            List<int[]> res=new ArrayList();
-            //  if(intervals==null||intervals.length==0)
-            //     return res.toArray(new int[res.size()][]);
-            Arrays.sort(intervals,new Comparator<int[]>(){
-                public int compare(int[] a, int[] b){
-                    return a[0]-b[0];
+                if(intervals==null||intervals.length<2)
+                    return intervals;
+
+                Arrays.sort(intervals,new Comparator<int[]>(){
+                    public int compare(int[] a,int[] b){
+                        return a[0]-b[0];
+                    }
+                });
+
+
+
+                List<int[]> list=new ArrayList();
+
+
+                list.add(intervals[0]);
+                for(int i=1;i<intervals.length;i++){
+                    int[] former=list.get(list.size()-1);
+
+                    if(former[1]<intervals[i][0]){
+                        list.add(intervals[i]);
+                    }else {
+                        former[1]=Math.max(intervals[i][1],former[1]);//!!这里需要注意和former[1]比较
+                        //   list.remove(list.size()-1);  指针引用传递 可直接修改
+                        // list.add(former);
+
+
+                    }
+
+
                 }
-            });
-
-            res.add(intervals[0]);
-            for(int i=1;i<intervals.length;i++){
-                int[] cur=intervals[i];
-
-                int[] tmp=res.get(res.size()-1);
-                if(cur[0]>tmp[1]){
-                    res.add(cur);
-                }else{
-                    tmp[1]=Math.max(tmp[1],cur[1]);
-                }
 
 
+
+                int[][] res=list.toArray(new int[list.size()][]);
+                return  res;
             }
-
-
-
-
-            return  res.toArray(new int[res.size()][]);
         }
     }
 }
