@@ -23,12 +23,14 @@ public class Leetcode157 {
      */
 
     public class Solution extends Reader4 {
+
         /**
          * @param buf Destination buffer
          * @param n   Number of characters to read
          * @return    The number of actual characters read
          */
         public int read(char[] buf, int n) {
+
             char temp[]=new char[4]; // used to store read4 buff
             int index=0;
 
@@ -48,5 +50,14 @@ public class Leetcode157 {
 
 
 
+    }
+
+    ////
+
+    private int read4(char[] temp) {
+        return 0;
+    }
+
+    private class Reader4 {
     }
 }
