@@ -30,28 +30,39 @@ public class Leetcode226 {
      * }
      */
     class Solution {
-        public TreeNode invertTree(TreeNode root) {
-            if(root==null)
-                return null;
 
-            helper(root);
+        public TreeNode invertTree(TreeNode root) {
+            if (root != null){
+                TreeNode temp = root.left;
+                root.left = invertTree(root.right);
+                root.right = invertTree(temp);
+            }
             return root;
         }
-
-
-        public void helper(TreeNode root){
-            if(root==null){
-                return;
-            }
-
-            TreeNode tmp=root.left;
-            root.left=root.right;
-            root.right=tmp;
-
-            helper(root.left);
-            helper(root.right);
-
-        }
+//
+//
+//        public TreeNode invertTree(TreeNode root) {
+//            if(root==null)
+//                return null;
+//
+//            helper(root);
+//            return root;
+//        }
+//
+//
+//        public void helper(TreeNode root){
+//            if(root==null){
+//                return;
+//            }
+//
+//            TreeNode tmp=root.left;
+//            root.left=root.right;
+//            root.right=tmp;
+//
+//            helper(root.left);
+//            helper(root.right);
+//
+//        }
     }
 
 
