@@ -43,7 +43,7 @@ public class Leetcode23 {
         ListNode cur=dummy;
 
         for(int i=0;i<lists.length;i++){
-            if(lists[i]!=null)
+            if(lists[i]!=null) ///!!!! 注意！！这里要记住！！判断是否为空 ！！
                 queue.offer(lists[i]);
         }
 
