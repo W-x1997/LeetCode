@@ -22,52 +22,51 @@ public class Leetcode148 {
 
         ListNode(int x) { val = x; }
 
-    public ListNode SortList(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
+}
+    class Solution {
+        public ListNode sortList(ListNode head) {
+            if(head==null||head.next==null)return head;
+            ListNode slow=head;
+            ListNode fast=head;
 
-        ListNode slow = head;
-        ListNode fast = head;
-        ListNode pre = null;
+            ListNode pre=head;//used to disconnect the list to get the 1st half
 
-        //找到链表的中间结点
-        while (fast != null && fast.next != null) {
-            pre = slow;
-            slow = slow.next;
-            fast = fast.next.next;
-        }
+            while(fast!=null&&fast.next!=null){
+                pre=slow;
 
-        pre.next = null;
-
-        //对链表的前半部分和后半部分分别进行排序
-        ListNode list1 = SortList(head);
-        ListNode list2 = SortList(slow);
-
-        return Merge(list1, list2);
-    }
-
-    //将两个排序好的链表进行合并
-    public ListNode Merge(ListNode list1, ListNode list2) {
-        ListNode result = new ListNode(-1);
-        ListNode temp = result;
-
-        while (list1 != null && list2 != null) {
-            if (list1.val < list2.val) {
-                temp.next = list1;
-                list1 = list1.next;
-            }else {
-                temp.next = list2;
-                list2 = list2.next;
+                slow=slow.next;
+                fast=fast.next.next;
             }
-            temp = temp.next;
+
+            pre.next=null; //!! So, we get the 1st half list
+
+            return merge(sortList(head),sortList(slow));
+
         }
-        if (list1 != null) {
-            temp.next = list1;
+
+
+        public ListNode merge(ListNode l1,ListNode l2){
+            ListNode dummy=new ListNode(0);
+            ListNode cur=dummy;
+
+            while(l1!=null&&l2!=null){
+                if(l1.val<=l2.val){
+                    cur.next=l1;
+                    cur=cur.next;
+                    l1=l1.next;
+                }else{
+                    cur.next=l2;
+                    cur=cur.next;
+                    l2=l2.next;
+                }
+            }
+            if(l1!=null)cur.next=l1;
+            if(l2!=null)cur.next=l2;
+
+            return dummy.next;
+
         }
-        if (list2 != null) {
-            temp.next = list2;
-        }
-        return result.next;
+
     }
-}}
+
+}
