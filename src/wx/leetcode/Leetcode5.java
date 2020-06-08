@@ -41,7 +41,7 @@ public class Leetcode5 {
                         }
 
                     }else
-                        dp[i][j]=0;
+                        dp[j][i]=0;
 
 
 
