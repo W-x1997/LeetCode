@@ -24,8 +24,13 @@ public class Leetcode40 {
         public List<List<Integer>> combinationSum2(int[] candidates, int target) {
             /**
              DFS+backtrack 经典题 和I 不同的是，nums里多了重复的元素，且每个只能使用一次
-             那么我们就需要多一步sort，backtrack中要判断nums[i],nums[i-1]相等与否，i是否大于start（自身不能重复搞）跳过
+             那么我们就需要多一步sort，
+             backtrack中要判断nums[i],nums[i-1]相等与否，i是否大于start（自身不能重复搞）跳过
              其他都是backtrack增删步骤
+
+             1.sort
+             2.判断nums[i],nums[i-1]相等与否，i是否大于index（自身不能重复搞）
+             3.i+1
 
              **/
             List<List<Integer>> res=new ArrayList();
