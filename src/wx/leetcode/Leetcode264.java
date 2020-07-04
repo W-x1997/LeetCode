@@ -1,5 +1,5 @@
 package wx.leetcode;
-import java.util.*
+import java.util.*;
 public class Leetcode264 {
     class Solution {
         /**
