@@ -1,121 +1,73 @@
 package wx.leetcode;
 
 public class Leetcode8 {
-    /**
-     *8. String to Integer (atoi)
-     * Implement atoi which converts a string to an integer.
-     *
-     * The function first discards as many whitespace characters as necessary until the first non-whitespace character is found. Then, starting from this character, takes an optional initial plus or minus sign followed by as many numerical digits as possible, and interprets them as a numerical value.
-     *
-     * The string can contain additional characters after those that form the integral number, which are ignored and have no effect on the behavior of this function.
-     *
-     * If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed.
-     *
-     * If no valid conversion could be performed, a zero value is returned.
-     *
-     * Note:
-     *
-     * Only the space character ' ' is considered as whitespace character.
-     * Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. If the numerical value is out of the range of representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
-     *
-     *
-     * 这题的做法大概是这样：
-     *
-     * 去掉前导空格
-     * 再是处理正负号
-     * 识别数字，注意越界情况。
-     *
-     */
-    public class Solution {
-        public int myAtoi(String str) {
-            char[] chars = str.toCharArray();
-            int n = chars.length;
-            int idx = 0;
-            while (idx < n && chars[idx] == ' ') {
-                // 去掉前导空格
-                idx++;
-            }
-            if (idx == n) {
-                //去掉前导空格以后到了末尾了
-                return 0;
-            }
-            boolean negative = false;
-            if (chars[idx] == '-') {
-                //遇到负号
-                negative = true;
-                idx++;
-            } else if (chars[idx] == '+') {
-                // 遇到正号
-                idx++;
-            } else if (!Character.isDigit(chars[idx])) {
-                // 其他符号
-                return 0;
-            }
-            int ans = 0;
-            while (idx < n && Character.isDigit(chars[idx])) {
-                int digit = chars[idx] - '0';
-                if (ans > (Integer.MAX_VALUE - digit) / 10) {
-                    // 本来应该是 ans * 10 + digit > Integer.MAX_VALUE
-                    // 但是 *10 和 + digit 都有可能越界，所有都移动到右边去就可以了。
-                    return negative? Integer.MIN_VALUE : Integer.MAX_VALUE;
-                }
-                ans = ans * 10 + digit;
-                idx++;
-            }
-            return negative? -ans : ans;
-        }
-    }
+    class Solution {
+        /**
+         8. String to Integer (atoi)
+         Implement atoi which converts a string to an integer.
 
-    class Solution2 {
+         The function first discards as many whitespace characters as necessary until the first non-whitespace character is found. Then, starting from this character, takes an optional initial plus or minus sign followed by as many numerical digits as possible, and interprets them as a numerical value.
+
+         The string can contain additional characters after those that form the integral number, which are ignored and have no effect on the behavior of this function.
+
+         If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such sequence exists because either str is empty or it contains only whitespace characters, no conversion is performed.
+
+         If no valid conversion could be performed, a zero value is returned.
+
+         Note:
+
+         Only the space character ' ' is considered as whitespace character.
+         Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. If the numerical value is out of the range of representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
+         **/
         public int myAtoi(String str) {
-            if(str==null||str.length()==0)
+
+            /**
+             题目翻译：忽略空格，然后计算sign。
+             开始挨个字符读取计算sum 如果sum overflow了，gg
+
+             难点在于overflow:把当前的总和与 intmax/10 或者 intmax%10 比较
+             其实就两种情况：
+             第一种是 之前总和就大于 intmax/10，下一个一定overflow无论正负
+             第二种是 之前的总和正好等于 intmax/10，正好等于！正好等于！！新的数字大于7就完蛋，如果是8呢，没关系一样完蛋或者返回int_minvalue
+             **/
+            str = str.trim();
+            if(str == null || str.length() == 0)
                 return 0;
 
-            double res=0;
-            boolean op=true;
-            boolean isused=false;
-            int index=0;
-            for(int i=0;i<str.length();i++){
-                char ch=str.charAt(i);
-                if(ch==' '){
-                    index++;
-                    continue;
-                }else
+            char symbol = str.charAt(0);
+            int sign = 1;
+            int total = 0;
+
+            int index = 0;
+
+            if (symbol == '+'){
+                sign = 1;
+                index++;
+            }else if(symbol == '-'){
+                sign = -1;
+                index ++;
+            }
+
+
+            while(index < str.length()){
+                int tmp = str.charAt(index) - '0';
+                if(tmp < 0 || tmp > 9){
+                    //return total * sign;
                     break;
+                }
+
+                if (Integer.MAX_VALUE / 10 < total || Integer.MAX_VALUE / 10 == total && Integer.MAX_VALUE % 10 < tmp){
+                    return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+
+                }
+
+                total = total * 10 + tmp;
+                index ++;
             }
 
-            if(index>=str.length())return 0;
-
-            for(int i=index;i<str.length();i++){
-                char ch=str.charAt(i);
-                if(ch=='-'&&res==0&&isused==false){
-                    op=false;
-                    isused=true;
-                    continue;
-                }
-                if(ch=='+'&&res==0&&isused==false){
-                    //op=false;
-                    isused=true;
-                    continue;
-                }
-                isused=true;  //因为第一个符号出现之后就不能再出现+ -
-                if(ch<'0'||ch>'9')break;
-                res=res*10+ch-'0';
-
-            }
-            if(op==false)
-                res=(-1)*res;
-
-            if(res>Integer.MAX_VALUE)
-                res=Integer.MAX_VALUE;
-
-            if(res<Integer.MIN_VALUE)
-                res=Integer.MIN_VALUE;
-
-            return (int)res;
+            return sign * total;
         }
     }
-
 
 
 }
