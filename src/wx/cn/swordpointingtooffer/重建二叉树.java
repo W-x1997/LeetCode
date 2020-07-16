@@ -8,7 +8,7 @@ public class 重建二叉树 {
      *  在中序遍历中查找  前序遍历的第一个元素 作为根结点。 然后根据index在中序遍历的位置，分为左子树和右子树，再进行重复的递归操作。
      */
 
-    public class TTreeNode {
+    public class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
