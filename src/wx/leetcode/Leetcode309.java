@@ -13,14 +13,18 @@ public class Leetcode309 {
              You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
              After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)
              **/
-//         # 好难
-// # sell[i]表示截至第i天，最后一个操作是卖时的最大收益；
-// # buy[i]表示截至第i天，最后一个操作是买时的最大收益；
-// # cool[i]表示截至第i天，最后一个操作是冷冻期时的最大收益；
-// # 递推公式：
-// # sell[i] = max(buy[i-1]+prices[i], sell[i-1]) (第一项表示第i天卖出，第二项表示第i天冷冻)
-// # buy[i] = max(cool[i-1]-prices[i], buy[i-1]) （第一项表示第i天买进，第二项表示第i天冷冻）
-// # cool[i] = max(sell[i-1], buy[i-1], cool[i-1])
+
+
+            /**
+         # 好难
+  sell[i]表示截至第i天，最后一个操作是卖时的最大收益；   ！！！这里的最后一个操作 不是指前一天的操作，而是 到这一天位置 所有天内的最后一次操作
+  buy[i]表示截至第i天，最后一个操作是买时的最大收益；
+  cool[i]表示截至第i天，最后一个操作是冷冻期时的最大收益；
+  递推公式：
+  sell[i] = max(buy[i-1]+prices[i], sell[i-1]) (第一项表示第i天卖出，第二项表示第i天冷冻)
+  buy[i] = max(cool[i-1]-prices[i], buy[i-1]) （第一项表示第i天买进，第二项表示第i天冷冻）
+  cool[i] = max(sell[i-1], buy[i-1], cool[i-1])
+                    **/
 
 
             if (prices == null || prices.length == 0)
