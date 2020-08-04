@@ -72,11 +72,10 @@ public class Promotion { public static void main(String[] args) {
                 if(i == codeList.length)
                     return 1;
             }else {
-                if (codeList[i][j].equals("anything"))
+                if (codeList[i][0].equals("anything"))
                     j = 1;
                 else
                     j = 0;
-
             }
         }
         return 0;
