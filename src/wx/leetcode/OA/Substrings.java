@@ -23,32 +23,60 @@ public class Substrings {
      */
 
     private static List<String> getKSubstring(String s, int k) {
-        Set<String> res = new HashSet<String>();
-        if (s == null || s.length() == 0)
-            return new ArrayList<>(res);
-        ;
+        Set<String> res = new HashSet<>();
+        int prev = 0;
+        int cur = 0;
+        Set<Character>  set = new HashSet<>();
 
-        Set<Character> window = new HashSet<>();
+        while (cur < s.length()) {
+            while (set.contains(s.charAt(cur))) {
+                set.remove(s.charAt(prev));
+                prev++;
+            }
+            set.add(s.charAt(cur));
+            cur++;
+            if (cur - prev == k) {
+                res.add(s.substring(prev, cur));
+                set.remove(s.charAt(prev));
+                prev++;
+            }
 
-        int left = 0;
-        int right = 0;
-        while (right < s.length()) {
-            char ch = s.charAt(right);
-            while(window.contains(ch) || window.size() >= k) {
-                window.remove(s.charAt(left));
-                left++;
-            }
-            window.add(ch);
-            right++;
-            if (right - left == k) {
-                res.add(new String(s.substring(left, right)));
-            }
         }
+
+
 
         return new ArrayList<>(res);
 
-
     }
+
+
+//    private static List<String> getKSubstring(String s, int k) {
+//        Set<String> res = new HashSet<String>();
+//        if (s == null || s.length() == 0)
+//            return new ArrayList<>(res);
+//        ;
+//
+//        Set<Character> window = new HashSet<>();
+//
+//        int left = 0;
+//        int right = 0;
+//        while (right < s.length()) {
+//            char ch = s.charAt(right);
+//            while(window.contains(ch) || window.size() >= k) {
+//                window.remove(s.charAt(left));
+//                left++;
+//            }
+//            window.add(ch);
+//            right++;
+//            if (right - left == k) {
+//                res.add(new String(s.substring(left, right)));
+//            }
+//        }
+//
+//        return new ArrayList<>(res);
+//
+//
+//    }
 
     public static void main(String[] args) {
         String s1="abcabc";//k=3
