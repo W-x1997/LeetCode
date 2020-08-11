@@ -14,9 +14,21 @@ public class DistanceBetweenNodesinBST {
  *      2
  *    /   \
  *   1     3
+ *
+ *
+ *
+ *
  */
 
-class TreeNode{
+
+    /**
+     * Java Solution :
+     *
+     * 1.Build BST
+     * 2/Find LCA
+     * 3.Find Distance from LCA to given points
+     */
+    static class TreeNode{
     int val;
     TreeNode left;
     TreeNode right;
@@ -26,52 +38,66 @@ class TreeNode{
     }
 }
 
-
-    public int getdistance(int[] nums, TreeNode n1, TreeNode n2){
-        //insert each node O(nlogn)
-        //find the depth of two nodes and their LCA in the tree
-        TreeNode root = new TreeNode(nums[0]);
-        for(int i = 1; i < nums.length; i++){
-            insert(root, nums[i]);
+    public static int findDistance(int[] is, int i, int j) {
+        TreeNode root = null;
+        for(int k=0;k< is.length;k++){
+            root = buildBST(root, is[k]);
         }
-
-        return lowestCommonAncestor(root, n1, n2);
+        TreeNode lca = findLeastCommonAncestor(root, i, j);
+        int distance = findDistanceFromLCA(lca,i)+findDistanceFromLCA(lca,j);
+        return distance;
     }
-    public int lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 
-        int parentVal = root.val;
-        int pVal = p.val;
-        int qVal = q.val;
-        if (pVal > parentVal && qVal > parentVal) {
-            return lowestCommonAncestor(root.right, p, q);
-        } else if (pVal < parentVal && qVal < parentVal) {
-            return lowestCommonAncestor(root.left, p, q);
-        } else {
-            int h1 = getHeight(root, p);
-            int h2 = getHeight(root, q);
-            if(h1 == -1 || h2 == -1) return -1;
-            return h1 + h2;
-        }
-    }
-    private int getHeight(TreeNode root, TreeNode node){
-        if(root == null) return -1;
-        if(root.val == node.val) return 0;
-        if(root.val > node.val){
-            int left = getHeight(root.left, node);
-            return left == -1 ? -1 : left + 1;
-        }else{
-            int right = getHeight(root.right, node);
-            return right == -1 ? -1 : right + 1;
+    private static int findDistanceFromLCA(TreeNode lca, int i) {
+        int distanceSum= 0;
+        while(true){
+            if(lca!=null){
+                if(lca.val==i)
+                    return distanceSum;
+                else if(lca.val<i){
+                    distanceSum++;
+                    lca = lca.right;
+                }
+                else if(lca.val>i){
+                    distanceSum++;
+                    lca = lca.left;
+                }
+            }
+            else
+                return distanceSum;
         }
     }
 
-    private TreeNode insert(TreeNode root, int num){
-        if(root == null){
-            return new TreeNode(num);
-        }else if(root.val > num){
-            root.left = insert(root.left, num);
-        }else{
-            root.right = insert(root.right, num);
+    private static TreeNode findLeastCommonAncestor(TreeNode root, int i, int j) {
+        while(true){
+            if(root.val>i && root.val>j){
+                root = root.left;
+            }
+            else if(root.val<i && root.val<j){
+                root = root.right;
+            }
+            else{
+                return root;
+            }
+        }
+    }
+
+    private static TreeNode buildBST(TreeNode root , int node) {
+        if(root==null){
+            root = new TreeNode(node);
+            return root;
+        }
+        else if(root.val<node){
+            if(root.right ==null)
+                root.right = new TreeNode(node);
+            else
+                buildBST(root.right, node);
+        }
+        else if(root.val>node){
+            if(root.left==null)
+                root.left = new TreeNode(node);
+            else
+                buildBST(root.left, node);
         }
         return root;
     }
